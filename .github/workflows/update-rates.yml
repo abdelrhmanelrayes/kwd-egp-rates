@@ -2,7 +2,7 @@ name: Update KWD to EGP Bank Rates
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 permissions:
