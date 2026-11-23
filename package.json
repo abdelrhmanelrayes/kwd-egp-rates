@@ -1,0 +1,11 @@
+{
+  "name": "kwd-egp-live-rates",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "fetch": "node scripts/fetch_rates.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

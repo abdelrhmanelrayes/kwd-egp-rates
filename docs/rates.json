@@ -1,0 +1,81 @@
+{
+  "fetchedAt": "2026-11-23T06:00:00.000Z",
+  "midMarket": {
+    "egpPerKwd": 171.19,
+    "kwdPerEgp": 0.0058415,
+    "updatedUtc": "Mon, 23 Nov 2026 06:00:00 GMT"
+  },
+  "providers": [
+    {
+      "id": "cbk",
+      "name": "البنك التجاري",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": 0.005785,
+      "live": true,
+      "sourceNote": "مباشر من موقع البنك",
+      "url": "https://www.cbk.com/ar/Rates--Markets/Foreign-Exchange-Rates"
+    },
+    {
+      "id": "kfh",
+      "name": "بيت التمويل الكويتي",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": null,
+      "live": false,
+      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "url": "https://www.kfh.com/en/home/Personal/Tools-services/Currency-Rates.html"
+    },
+    {
+      "id": "burgan",
+      "name": "بنك برقان",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": null,
+      "live": false,
+      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "url": "https://burgan.com/en/currency/bbcurrency-convertor/"
+    },
+    {
+      "id": "gulfbank",
+      "name": "بنك الخليج",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": null,
+      "live": false,
+      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "url": "https://www.e-gulfbank.com/en/treasury/tools/exchange-rates/"
+    },
+    {
+      "id": "boubyan",
+      "name": "بنك بوبيان",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": null,
+      "live": false,
+      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "url": "https://www.bankboubyan.com/en/exchange-rates"
+    },
+    {
+      "id": "nbk",
+      "name": "بنك الكويت الوطني",
+      "type": "bank",
+      "fee": 0,
+      "kwdPerEgp": null,
+      "live": false,
+      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "url": "https://www.nbk.com/kuwait/personal/investments/currency-rates.html"
+    },
+    {
+      "id": "almulla",
+      "name": "الملا للصرافة",
+      "type": "exchange",
+      "fee": 1.5,
+      "kwdPerEgp": 0.0058708,
+      "live": false,
+      "estimated": true,
+      "sourceNote": "تقديري حسب السوق (-0.5%)",
+      "url": "https://www.almullaexchange.com/ar/country/send-money-to-egypt"
+    }
+  ]
+}

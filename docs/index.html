@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مقارنة سعر تحويل الدينار الكويتي للجنيه — تحديث تلقائي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <style>
+    body { font-family: 'Cairo', 'Inter', system-ui, sans-serif; background-color: #f8fafc; color: #0f172a; }
+    .tabular-nums { font-family: 'Inter', 'Cairo', sans-serif; font-variant-numeric: tabular-nums; direction: ltr; display: inline-block; }
+    .spin-anim { animation: spin 0.9s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h1 class="text-sm sm:text-base font-extrabold truncate">مقارنة سعر الدينار للجنيه — تلقائي</h1>
+        <p class="text-[11px] text-slate-400 truncate" id="statusLine">جاري تحميل آخر تحديث للأسعار...</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="text-slate-300">السوق:</span>
+          <span class="font-bold text-emerald-300 tabular-nums" id="headerMidRate">—</span>
+          <span class="text-slate-400">ج.م</span>
+        </div>
+        <button id="btnRefresh" type="button" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer">
+          <svg id="refreshIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>تحديث</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-5 space-y-4">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button type="button" id="modeSendKwd" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs cursor-pointer">تحويل بالدينار (د.ك)</button>
+          <button type="button" id="modeReceiveEgp" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-600 cursor-pointer">مبلغ مطلوب بالجنيه (ج.م)</button>
+        </div>
+        <div class="flex items-center gap-1.5 flex-wrap" id="presetChips"></div>
+      </div>
+
+      <div class="flex items-center bg-slate-50 border-2 border-slate-200 focus-within:border-emerald-600 rounded-xl px-3.5 py-2">
+        <input id="amountInput" type="number" min="1" step="any" value="100" class="w-full bg-transparent text-2xl sm:text-3xl font-extrabold text-slate-900 outline-none tabular-nums text-right" />
+        <span id="amountUnitBadge" class="mr-3 px-2.5 py-1 rounded-lg bg-slate-200/80 text-slate-800 text-xs sm:text-sm font-extrabold">د.ك</span>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="inline-flex bg-white p-1 rounded-xl border border-slate-200">
+        <button type="button" data-filter="all" class="filter-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white cursor-pointer">الكل</button>
+        <button type="button" data-filter="bank" class="filter-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 cursor-pointer">البنوك</button>
+        <button type="button" data-filter="exchange" class="filter-btn px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 cursor-pointer">الصرافة</button>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button type="button" id="btnCopy" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl cursor-pointer">نسخ للواتساب</button>
+        <button type="button" id="btnClearOverrides" class="bg-white hover:bg-rose-50 border border-slate-200 text-slate-600 hover:text-rose-700 text-xs font-bold px-3 py-1.5 rounded-xl cursor-pointer">مسح التعديلات</button>
+      </div>
+    </div>
+
+    <div id="providersRows" class="space-y-2.5">
+      <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-500">جاري تحميل الأسعار...</div>
+    </div>
+  </main>
+
+  <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-200">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold" id="editModalTitle">تعديل السعر</h3>
+        <button type="button" id="closeEditModal" class="text-slate-400 hover:text-slate-700 font-bold text-lg cursor-pointer">✕</button>
+      </div>
+      <form id="editForm" class="space-y-3">
+        <input type="hidden" id="editId" />
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">أدخل السعر بصيغة البنك (مثل 0.005719) أو بالجنيه (مثل 174.86)</label>
+          <input id="editInput" type="number" step="any" min="0.0001" required class="w-full bg-slate-50 border border-slate-300 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-base font-bold outline-none tabular-nums text-right" />
+          <p id="editPreview" class="text-xs text-emerald-700 font-semibold mt-1"></p>
+        </div>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" id="cancelEdit" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white cursor-pointer">حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg"></div>
+
+  <script>
+    (function () {
+      const OVERRIDE_KEY = 'kwd_egp_gh_overrides_v1';
+      let state = {
+        amount: 100,
+        calcMode: 'send_kwd',
+        filter: 'all',
+        midMarket: null,
+        fetchedAt: null,
+        providers: [],
+        overrides: {}
+      };
+      let toastTimer = null;
+
+      function loadOverrides() {
+        try {
+          const raw = localStorage.getItem(OVERRIDE_KEY);
+          if (raw) state.overrides = JSON.parse(raw) || {};
+        } catch (e) {}
+      }
+
+      function saveOverrides() {
+        try {
+          localStorage.setItem(OVERRIDE_KEY, JSON.stringify(state.overrides));
+        } catch (e) {}
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.add('hidden'), 3000);
+      }
+
+      function fmtNum(val, dec = 2) {
+        if (val === null || val === undefined || !isFinite(val)) return '—';
+        return Number(val).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      }
+
+      function parseToKwd(raw) {
+        const n = Number(raw);
+        if (!isFinite(n) || n <= 0) return null;
+        return n < 1 ? Number(n.toFixed(7)) : Number((1 / n).toFixed(7));
+      }
+
+      function getMergedProviders() {
+        return state.providers.map(p => {
+          const ov = state.overrides[p.id];
+          const kwdPerEgp = ov && ov.kwdPerEgp ? ov.kwdPerEgp : p.kwdPerEgp;
+          const isManual = Boolean(ov && ov.kwdPerEgp);
+          const fee = Number(p.fee) || 0;
+          const amt = Number(state.amount) > 0 ? Number(state.amount) : 0;
+
+          if (!kwdPerEgp || amt <= 0) {
+            return { ...p, kwdPerEgp, isManual, hasRate: false, egpPerKwd: 0, netEgp: 0, totalKwd: 0 };
+          }
+          const egpPerKwd = 1 / kwdPerEgp;
+          const netEgp = state.calcMode === 'send_kwd' ? Math.max(0, amt - fee) * egpPerKwd : amt;
+          const totalKwd = state.calcMode === 'send_kwd' ? amt : (amt * kwdPerEgp) + fee;
+          return { ...p, kwdPerEgp, isManual, hasRate: true, egpPerKwd, netEgp, totalKwd };
+        });
+      }
+
+      function renderPresets() {
+        const presets = state.calcMode === 'send_kwd' ? [100, 250, 500, 1000, 2000] : [10000, 25000, 50000, 100000];
+        const unit = state.calcMode === 'send_kwd' ? 'د.ك' : 'ج.م';
+        document.getElementById('presetChips').innerHTML = presets.map(v => {
+          const active = Number(state.amount) === v;
+          return '<button type="button" data-preset="' + v + '" class="px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer ' +
+            (active ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100') +
+            '"><span class="tabular-nums">' + v.toLocaleString('en-US') + '</span> ' + unit + '</button>';
+        }).join('');
+      }
+
+      function renderRows() {
+        let list = getMergedProviders();
+        const activeAll = list.filter(p => p.hasRate);
+        const best = activeAll.length > 0
+          ? [...activeAll].sort((a, b) => state.calcMode === 'send_kwd' ? b.netEgp - a.netEgp : a.totalKwd - b.totalKwd)[0]
+          : null;
+
+        if (state.filter !== 'all') {
+          list = list.filter(p => p.type === state.filter);
+        }
+
+        list.sort((a, b) => {
+          if (a.hasRate && !b.hasRate) return -1;
+          if (!a.hasRate && b.hasRate) return 1;
+          if (!a.hasRate && !b.hasRate) return 0;
+          return state.calcMode === 'send_kwd' ? b.netEgp - a.netEgp : a.totalKwd - b.totalKwd;
+        });
+
+        const container = document.getElementById('providersRows');
+        container.innerHTML = list.map((p, idx) => {
+          const isBest = best && p.id === best.id && p.hasRate;
+          const feePill = p.fee > 0
+            ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">عمولة ' + p.fee + ' د.ك</span>'
+            : '';
+          const statusPill = p.isManual
+            ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-sky-800">تعديل يدوي</span>'
+            : (p.live && !p.estimated
+                ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">مباشر</span>'
+                : (p.estimated ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">تقديري</span>' : ''));
+
+          const subLine = p.hasRate
+            ? '<div class="text-xs text-slate-500 mt-1 flex items-center gap-1.5 flex-wrap">' +
+                '<span>بيع تحويل <span class="tabular-nums font-semibold text-slate-700">' + p.kwdPerEgp.toFixed(7) + '</span> د.ك · <span class="tabular-nums font-semibold text-slate-700">' + fmtNum(p.egpPerKwd, 2) + '</span> ج/د.ك</span>' +
+                '<button type="button" data-edit="' + p.id + '" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded cursor-pointer">تعديل</button>' +
+              '</div>'
+            : '<div class="text-xs text-slate-500 mt-1 flex items-center gap-2 flex-wrap">' +
+                '<span>' + p.sourceNote + '</span>' +
+                '<button type="button" data-edit="' + p.id + '" class="text-[11px] font-bold text-white bg-emerald-600 px-2.5 py-0.5 rounded-lg cursor-pointer">أدخل السعر</button>' +
+              '</div>';
+
+          let leftHtml = '<div class="text-left shrink-0 text-xs text-slate-400">—</div>';
+          if (p.hasRate) {
+            if (state.calcMode === 'send_kwd') {
+              const diff = best ? Math.round(best.netEgp - p.netEgp) : 0;
+              const diffHtml = isBest
+                ? '<div class="text-xs font-bold text-emerald-700 mt-0.5">الأفضل</div>'
+                : (diff > 0 ? '<div class="text-xs font-semibold text-rose-600 mt-0.5"><span class="tabular-nums">-' + diff.toLocaleString('en-US') + '</span> ج.م</div>' : '');
+              leftHtml = '<div class="text-left shrink-0"><div class="text-base sm:text-lg font-extrabold text-slate-900"><span class="tabular-nums">' + fmtNum(p.netEgp, 0) + '</span> <span class="text-xs sm:text-sm font-bold">ج.م</span></div>' + diffHtml + '</div>';
+            } else {
+              const diff = best ? (p.totalKwd - best.totalKwd) : 0;
+              const diffHtml = isBest
+                ? '<div class="text-xs font-bold text-emerald-700 mt-0.5">الأقل تكلفة</div>'
+                : (diff > 0.005 ? '<div class="text-xs font-semibold text-rose-600 mt-0.5"><span class="tabular-nums">+' + fmtNum(diff, 2) + '</span> د.ك</div>' : '');
+              leftHtml = '<div class="text-left shrink-0"><div class="text-base sm:text-lg font-extrabold text-slate-900"><span class="tabular-nums">' + fmtNum(p.totalKwd, 3) + '</span> <span class="text-xs sm:text-sm font-bold">د.ك</span></div>' + diffHtml + '</div>';
+            }
+          }
+
+          return '<div class="rounded-2xl border px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3 ' +
+            (isBest ? 'bg-emerald-50/75 border-emerald-700/60 shadow-xs' : 'bg-white border-slate-200/90 shadow-2xs') + '">' +
+            '<div class="flex items-center gap-3.5 min-w-0">' +
+              '<span class="text-sm sm:text-base font-extrabold w-5 text-center shrink-0 tabular-nums ' + (isBest ? 'text-emerald-800' : 'text-slate-500') + '">' + (p.hasRate ? idx + 1 : '•') + '</span>' +
+              '<div class="min-w-0">' +
+                '<div class="flex items-center gap-1.5 flex-wrap">' +
+                  '<a href="' + p.url + '" target="_blank" rel="noopener noreferrer" class="text-sm sm:text-base font-extrabold text-slate-900 underline decoration-slate-400 underline-offset-4 hover:text-emerald-700">' + p.name + '</a>' +
+                  feePill + statusPill +
+                '</div>' +
+                subLine +
+              '</div>' +
+            '</div>' +
+            leftHtml +
+          '</div>';
+        }).join('');
+      }
+
+      async function loadRates(showMsg = false) {
+        const icon = document.getElementById('refreshIcon');
+        const btn = document.getElementById('btnRefresh');
+        icon.classList.add('spin-anim');
+        btn.disabled = true;
+        try {
+          const res = await fetch('./rates.json?t=' + Date.now(), { cache: 'no-store' });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          state.midMarket = data.midMarket;
+          state.providers = data.providers || [];
+          state.fetchedAt = data.fetchedAt;
+
+          document.getElementById('headerMidRate').textContent = fmtNum(data.midMarket?.egpPerKwd, 2);
+          const dt = data.fetchedAt ? new Date(data.fetchedAt).toLocaleString('ar-EG', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : '';
+          document.getElementById('statusLine').textContent = 'آخر تحديث تلقائي (كل 30 دقيقة): ' + dt;
+          renderRows();
+          if (showMsg) showToast('تم تحميل أحدث الأسعار!');
+        } catch (e) {
+          document.getElementById('statusLine').textContent = 'تعذر تحميل ملف الأسعار.';
+        } finally {
+          icon.classList.remove('spin-anim');
+          btn.disabled = false;
+        }
+      }
+
+      function bindEvents() {
+        document.getElementById('btnRefresh').addEventListener('click', () => loadRates(true));
+
+        const amountInput = document.getElementById('amountInput');
+        amountInput.addEventListener('input', (e) => {
+          const v = Number(e.target.value);
+          state.amount = isFinite(v) && v >= 0 ? v : 0;
+          renderPresets();
+          renderRows();
+        });
+
+        document.getElementById('presetChips').addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-preset]');
+          if (!btn) return;
+          state.amount = Number(btn.getAttribute('data-preset'));
+          amountInput.value = state.amount;
+          renderPresets();
+          renderRows();
+        });
+
+        document.getElementById('modeSendKwd').addEventListener('click', () => {
+          state.calcMode = 'send_kwd';
+          state.amount = 100;
+          amountInput.value = 100;
+          document.getElementById('amountUnitBadge').textContent = 'د.ك';
+          document.getElementById('modeSendKwd').className = 'px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs cursor-pointer';
+          document.getElementById('modeReceiveEgp').className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 cursor-pointer';
+          renderPresets();
+          renderRows();
+        });
+
+        document.getElementById('modeReceiveEgp').addEventListener('click', () => {
+          state.calcMode = 'receive_egp';
+          state.amount = 50000;
+          amountInput.value = 50000;
+          document.getElementById('amountUnitBadge').textContent = 'ج.م';
+          document.getElementById('modeReceiveEgp').className = 'px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-xs cursor-pointer';
+          document.getElementById('modeSendKwd').className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 cursor-pointer';
+          renderPresets();
+          renderRows();
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.filter = btn.getAttribute('data-filter');
+            document.querySelectorAll('.filter-btn').forEach(b => {
+              const active = b.getAttribute('data-filter') === state.filter;
+              b.className = 'filter-btn px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ' + (active ? 'bg-slate-900 text-white' : 'text-slate-600');
+            });
+            renderRows();
+          });
+        });
+
+        document.getElementById('providersRows').addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-edit]');
+          if (!btn) return;
+          const id = btn.getAttribute('data-edit');
+          const p = getMergedProviders().find(x => x.id === id);
+          if (!p) return;
+          document.getElementById('editId').value = id;
+          document.getElementById('editModalTitle').textContent = 'تعديل سعر: ' + p.name;
+          document.getElementById('editInput').value = p.kwdPerEgp || '';
+          document.getElementById('editPreview').textContent = p.kwdPerEgp ? 'بيع تحويل ' + p.kwdPerEgp.toFixed(7) + ' د.ك · ' + fmtNum(1 / p.kwdPerEgp, 2) + ' ج/د.ك' : '';
+          document.getElementById('editModal').classList.remove('hidden');
+          document.getElementById('editModal').classList.add('flex');
+        });
+
+        document.getElementById('editInput').addEventListener('input', (e) => {
+          const kwd = parseToKwd(e.target.value);
+          document.getElementById('editPreview').textContent = kwd ? 'بيع تحويل ' + kwd.toFixed(7) + ' د.ك · ' + fmtNum(1 / kwd, 2) + ' ج/د.ك' : '';
+        });
+
+        const closeModal = () => {
+          document.getElementById('editModal').classList.add('hidden');
+          document.getElementById('editModal').classList.remove('flex');
+        };
+        document.getElementById('closeEditModal').addEventListener('click', closeModal);
+        document.getElementById('cancelEdit').addEventListener('click', closeModal);
+
+        document.getElementById('editForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const id = document.getElementById('editId').value;
+          const kwd = parseToKwd(document.getElementById('editInput').value);
+          if (!kwd) return;
+          state.overrides[id] = { kwdPerEgp: kwd };
+          saveOverrides();
+          closeModal();
+          renderRows();
+          showToast('تم حفظ السعر اليدوي!');
+        });
+
+        document.getElementById('btnClearOverrides').addEventListener('click', () => {
+          state.overrides = {};
+          saveOverrides();
+          renderRows();
+          showToast('تم مسح التعديلات اليدوية.');
+        });
+
+        document.getElementById('btnCopy').addEventListener('click', () => {
+          const list = getMergedProviders().filter(p => p.hasRate).sort((a, b) => state.calcMode === 'send_kwd' ? b.netEgp - a.netEgp : a.totalKwd - b.totalKwd);
+          const lines = ['💱 مقارنة تحويل ' + fmtNum(state.amount, 0) + (state.calcMode === 'send_kwd' ? ' د.ك' : ' ج.م'), ''];
+          list.forEach((p, i) => {
+            const v = state.calcMode === 'send_kwd' ? fmtNum(p.netEgp, 0) + ' ج.م' : fmtNum(p.totalKwd, 3) + ' د.ك';
+            lines.push((i + 1) + '. ' + p.name + ': ' + v + ' (' + p.kwdPerEgp.toFixed(7) + ' د.ك)');
+          });
+          const text = lines.join('\n');
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => showToast('تم النسخ بنجاح!'));
+          }
+        });
+      }
+
+      loadOverrides();
+      renderPresets();
+      bindEvents();
+      loadRates(false);
+    })();
+  </script>
+</body>
+</html>
