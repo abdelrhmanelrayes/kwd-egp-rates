@@ -1,9 +1,9 @@
 {
-  "fetchedAt": "2026-11-23T06:00:00.000Z",
+  "fetchedAt": "2026-11-23T06:57:44.225Z",
   "midMarket": {
-    "egpPerKwd": 171.19,
-    "kwdPerEgp": 0.0058415,
-    "updatedUtc": "Mon, 23 Nov 2026 06:00:00 GMT"
+    "egpPerKwd": 173.2203,
+    "kwdPerEgp": 0.005773,
+    "updatedUtc": "Mon, 23 Nov 2026 00:02:32 +0000"
   },
   "providers": [
     {
@@ -11,9 +11,10 @@
       "name": "البنك التجاري",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.005785,
+      "kwdPerEgp": 0.005705,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
+      "updatedAt": "2026-11-23T06:56:57.931Z",
       "url": "https://www.cbk.com/ar/Rates--Markets/Foreign-Exchange-Rates"
     },
     {
@@ -21,9 +22,10 @@
       "name": "بيت التمويل الكويتي",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": null,
-      "live": false,
-      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "kwdPerEgp": 0.005719,
+      "live": true,
+      "sourceNote": "مباشر من موقع البنك",
+      "updatedAt": "2026-11-23T06:57:02.377Z",
       "url": "https://www.kfh.com/en/home/Personal/Tools-services/Currency-Rates.html"
     },
     {
@@ -33,7 +35,8 @@
       "fee": 0,
       "kwdPerEgp": null,
       "live": false,
-      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "sourceNote": "تعذر السحب — أدخل السعر يدوياً",
+      "updatedAt": null,
       "url": "https://burgan.com/en/currency/bbcurrency-convertor/"
     },
     {
@@ -41,9 +44,10 @@
       "name": "بنك الخليج",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": null,
-      "live": false,
-      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "kwdPerEgp": 0.0058716,
+      "live": true,
+      "sourceNote": "مباشر من موقع البنك",
+      "updatedAt": "2026-11-23T06:57:25.267Z",
       "url": "https://www.e-gulfbank.com/en/treasury/tools/exchange-rates/"
     },
     {
@@ -51,9 +55,10 @@
       "name": "بنك بوبيان",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": null,
-      "live": false,
-      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "kwdPerEgp": 0.005866,
+      "live": true,
+      "sourceNote": "مباشر من موقع البنك",
+      "updatedAt": "2026-11-23T06:57:30.581Z",
       "url": "https://www.bankboubyan.com/en/exchange-rates"
     },
     {
@@ -61,9 +66,10 @@
       "name": "بنك الكويت الوطني",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": null,
-      "live": false,
-      "sourceNote": "سيتم التحديث في أول تشغيل لـ GitHub Actions",
+      "kwdPerEgp": 0.0058137,
+      "live": true,
+      "sourceNote": "مباشر من موقع البنك",
+      "updatedAt": "2026-11-23T06:57:39.296Z",
       "url": "https://www.nbk.com/kuwait/personal/investments/currency-rates.html"
     },
     {
@@ -71,10 +77,11 @@
       "name": "الملا للصرافة",
       "type": "exchange",
       "fee": 1.5,
-      "kwdPerEgp": 0.0058708,
+      "kwdPerEgp": 0.005802,
       "live": false,
       "estimated": true,
       "sourceNote": "تقديري حسب السوق (-0.5%)",
+      "updatedAt": "2026-11-23T06:57:44.168Z",
       "url": "https://www.almullaexchange.com/ar/country/send-money-to-egypt"
     }
   ]
