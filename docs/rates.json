@@ -1,9 +1,9 @@
 {
-  "fetchedAt": "2026-11-26T05:35:34.459Z",
+  "fetchedAt": "2026-11-26T15:15:39.053Z",
   "midMarket": {
-    "egpPerKwd": 174.2607,
-    "kwdPerEgp": 0.0057385,
-    "updatedUtc": "Wed, 25 Nov 2026 00:02:31 +0000"
+    "egpPerKwd": 175.3015,
+    "kwdPerEgp": 0.0057045,
+    "updatedUtc": "Thu, 26 Nov 2026 00:02:31 +0000"
   },
   "providers": [
     {
@@ -11,10 +11,10 @@
       "name": "البنك التجاري",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.005676,
+      "kwdPerEgp": 0.005677,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
-      "updatedAt": "2026-11-26T05:34:38.665Z",
+      "updatedAt": "2026-11-26T15:14:50.167Z",
       "url": "https://www.cbk.com/ar/Rates--Markets/Foreign-Exchange-Rates"
     },
     {
@@ -22,10 +22,10 @@
       "name": "بيت التمويل الكويتي",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.005692,
+      "kwdPerEgp": 0.005715,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
-      "updatedAt": "2026-11-26T05:34:44.203Z",
+      "updatedAt": "2026-11-26T15:14:55.822Z",
       "url": "https://www.kfh.com/en/home/Personal/Tools-services/Currency-Rates.html"
     },
     {
@@ -44,10 +44,10 @@
       "name": "بنك الخليج",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.0057534,
+      "kwdPerEgp": 0.0057029,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
-      "updatedAt": "2026-11-26T05:35:15.478Z",
+      "updatedAt": "2026-11-26T15:15:19.257Z",
       "url": "https://www.e-gulfbank.com/en/treasury/tools/exchange-rates/"
     },
     {
@@ -55,10 +55,10 @@
       "name": "بنك بوبيان",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.005838,
+      "kwdPerEgp": 0.006009,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
-      "updatedAt": "2026-11-26T05:35:20.780Z",
+      "updatedAt": "2026-11-26T15:15:24.303Z",
       "url": "https://www.bankboubyan.com/en/exchange-rates"
     },
     {
@@ -66,10 +66,10 @@
       "name": "بنك الكويت الوطني",
       "type": "bank",
       "fee": 0,
-      "kwdPerEgp": 0.0058358,
+      "kwdPerEgp": 0.005834,
       "live": true,
       "sourceNote": "مباشر من موقع البنك",
-      "updatedAt": "2026-11-26T05:35:29.334Z",
+      "updatedAt": "2026-11-26T15:15:34.087Z",
       "url": "https://www.nbk.com/kuwait/personal/investments/currency-rates.html"
     },
     {
@@ -77,11 +77,11 @@
       "name": "الملا للصرافة",
       "type": "exchange",
       "fee": 1.5,
-      "kwdPerEgp": 0.0057674,
+      "kwdPerEgp": 0.0057331,
       "live": false,
       "estimated": true,
       "sourceNote": "تقديري حسب السوق (-0.5%)",
-      "updatedAt": "2026-11-26T05:35:34.411Z",
+      "updatedAt": "2026-11-26T15:15:39.009Z",
       "url": "https://www.almullaexchange.com/ar/country/send-money-to-egypt"
     }
   ]
